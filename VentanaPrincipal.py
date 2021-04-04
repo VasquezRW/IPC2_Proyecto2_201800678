@@ -80,6 +80,104 @@ def rotarVerticalB():
     cargarMatrizB()
 
 
+def transpuestaA():
+    matriz = matrices.obtener_Matriz(clickedA.get())
+    matrizOperada = transpuestaMatriz(matriz)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizA()
+
+
+def transpuestaB():
+    matriz = matrices.obtener_Matriz(clickedB.get())
+    matrizOperada = transpuestaMatriz(matriz)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizB()
+
+
+def limpiarZonaA():
+    matriz = matrices.obtener_Matriz(clickedA.get())
+    filaInicio = int(entry_filaInicioA.get())
+    columnaInicio = int(entry_columnaInicioA.get())
+    filaFin = int(entry_filaFinA.get())
+    columnaFin = int(entry_columnaFinA.get())
+    matrizOperada = limpiarZona(matriz, filaInicio, columnaInicio, filaFin, columnaFin)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizA()
+
+
+def limpiarZonaB():
+    matriz = matrices.obtener_Matriz(clickedB.get())
+    filaInicio = int(entry_filaInicioB.get())
+    columnaInicio = int(entry_columnaInicioB.get())
+    filaFin = int(entry_filaFinB.get())
+    columnaFin = int(entry_columnaFinB.get())
+    matrizOperada = limpiarZona(matriz, filaInicio, columnaInicio, filaFin, columnaFin)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizB()
+
+
+def addLineaHorizontalA():
+    matriz = matrices.obtener_Matriz(clickedA.get())
+    filaInicio = int(entry_filaInicioA.get())
+    columnaInicio = int(entry_columnaInicioA.get())
+    longitud = int(entry_altoLongA.get())
+    matrizOperada = agregarLineaHorizontal(matriz, filaInicio, columnaInicio, longitud)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizA()
+
+
+def addLineaVerticalA():
+    matriz = matrices.obtener_Matriz(clickedA.get())
+    filaInicio = int(entry_filaInicioA.get())
+    columnaInicio = int(entry_columnaInicioA.get())
+    longitud = int(entry_altoLongA.get())
+    matrizOperada = agregarLineaVertical(matriz, filaInicio, columnaInicio, longitud)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizA()
+
+
+def addLineaHorizontalB():
+    matriz = matrices.obtener_Matriz(clickedB.get())
+    filaInicio = int(entry_filaInicioB.get())
+    columnaInicio = int(entry_columnaInicioB.get())
+    longitud = int(entry_altoLongB.get())
+    matrizOperada = agregarLineaHorizontal(matriz, filaInicio, columnaInicio, longitud)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizB()
+
+
+def addLineaVerticalB():
+    matriz = matrices.obtener_Matriz(clickedB.get())
+    filaInicio = int(entry_filaInicioB.get())
+    columnaInicio = int(entry_columnaInicioB.get())
+    longitud = int(entry_altoLongB.get())
+    matrizOperada = agregarLineaVertical(matriz, filaInicio, columnaInicio, longitud)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizB()
+
+
+def addRectanguloA():
+    matriz = matrices.obtener_Matriz(clickedA.get())
+    filaInicio = int(entry_filaInicioA.get())
+    columnaInicio = int(entry_columnaInicioA.get())
+    alto = int(entry_altoLongA.get())
+    ancho = int(entry_anchoA.get())
+    matrizOperada = agregarRectangulo(matriz, filaInicio, columnaInicio, alto, ancho)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizA()
+
+
+def addRectanguloB():
+    matriz = matrices.obtener_Matriz(clickedB.get())
+    filaInicio = int(entry_filaInicioB.get())
+    columnaInicio = int(entry_columnaInicioB.get())
+    alto = int(entry_altoLongB.get())
+    ancho = int(entry_anchoB.get())
+    matrizOperada = agregarRectangulo(matriz, filaInicio, columnaInicio, alto, ancho)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizB()
+
+
 def crearMatriz(frame, matriz):
     for i in range(matriz.filas):
         for j in range(matriz.columnas):
@@ -209,7 +307,6 @@ frameSelecMA.grid(row=0, column=0)
 frameSelecMB = LabelFrame(frameMAB, text='Seleccione la matriz B')
 frameSelecMB.grid(row=0, column=1)
 
-
 # combo box y botones de carga de matrices y seleccion de matrices A y B
 clickedA = StringVar()
 clickedA.set("Ninguna")
@@ -235,22 +332,72 @@ Label(frameMatrizR, text="Matriz Resultante, en construccion", font=("arial ital
 # botones matriz A
 Button(frameOperacionesMatrizA, text="Rotacion Horizontal", command=rotarHorizontalA).grid(row=0, column=0)
 Button(frameOperacionesMatrizA, text="Rotacion Vertical", command=rotarVerticalA).grid(row=0, column=1)
-Button(frameOperacionesMatrizA, text="Transpuesta").grid(row=1, column=0)
-Button(frameOperacionesMatrizA, text="Limpiar Zona").grid(row=1, column=1)
-Button(frameOperacionesMatrizA, text="Linea Horizontal").grid(row=2, column=0)
-Button(frameOperacionesMatrizA, text="Linea Vertical").grid(row=2, column=1)
-Button(frameOperacionesMatrizA, text="Agregar Rectangulo").grid(row=3, column=0)
+Button(frameOperacionesMatrizA, text="Transpuesta", command=transpuestaA).grid(row=1, column=0)
+Button(frameOperacionesMatrizA, text="Limpiar Zona", command=limpiarZonaA).grid(row=1, column=1)
+Button(frameOperacionesMatrizA, text="Linea Horizontal", command=addLineaHorizontalA).grid(row=2, column=0)
+Button(frameOperacionesMatrizA, text="Linea Vertical", command=addLineaVerticalA).grid(row=2, column=1)
+Button(frameOperacionesMatrizA, text="Agregar Rectangulo", command=addRectanguloA).grid(row=3, column=0)
 Button(frameOperacionesMatrizA, text="Agregar Triangulo Rectangulo").grid(row=3, column=1)
+# datos para las operaciones
+Label(frameOperacionesMatrizA, text="Fila Inicio").grid(row=4, column=0)
+entry_filaInicioA = Entry(frameOperacionesMatrizA)
+entry_filaInicioA.grid(row=4, column=1)
+
+Label(frameOperacionesMatrizA, text="Columna Inicio").grid(row=5, column=0)
+entry_columnaInicioA = Entry(frameOperacionesMatrizA)
+entry_columnaInicioA.grid(row=5, column=1)
+
+Label(frameOperacionesMatrizA, text="Fila Fin").grid(row=6, column=0)
+entry_filaFinA = Entry(frameOperacionesMatrizA)
+entry_filaFinA.grid(row=6, column=1)
+
+Label(frameOperacionesMatrizA, text="Columna Fin").grid(row=7, column=0)
+entry_columnaFinA = Entry(frameOperacionesMatrizA)
+entry_columnaFinA.grid(row=7, column=1)
+
+Label(frameOperacionesMatrizA, text="Alto/Longitud de fila").grid(row=8, column=0)
+entry_altoLongA = Entry(frameOperacionesMatrizA)
+entry_altoLongA.grid(row=8, column=1)
+
+Label(frameOperacionesMatrizA, text="Ancho").grid(row=9, column=0)
+entry_anchoA = Entry(frameOperacionesMatrizA)
+entry_anchoA.grid(row=9, column=1)
 
 # botones matriz B
 Button(frameOperacionesMatrizB, text="Rotacion Horizontal", command=rotarHorizontalB).grid(row=0, column=0)
 Button(frameOperacionesMatrizB, text="Rotacion Vertical", command=rotarVerticalB).grid(row=0, column=1)
-Button(frameOperacionesMatrizB, text="Transpuesta").grid(row=1, column=0)
-Button(frameOperacionesMatrizB, text="Limpiar Zona").grid(row=1, column=1)
-Button(frameOperacionesMatrizB, text="Linea Horizontal").grid(row=2, column=0)
-Button(frameOperacionesMatrizB, text="Linea Vertical").grid(row=2, column=1)
-Button(frameOperacionesMatrizB, text="Agregar Rectangulo").grid(row=3, column=0)
+Button(frameOperacionesMatrizB, text="Transpuesta", command=transpuestaB).grid(row=1, column=0)
+Button(frameOperacionesMatrizB, text="Limpiar Zona", command=limpiarZonaB).grid(row=1, column=1)
+Button(frameOperacionesMatrizB, text="Linea Horizontal", command=addLineaHorizontalB).grid(row=2, column=0)
+Button(frameOperacionesMatrizB, text="Linea Vertical", command=addLineaVerticalB).grid(row=2, column=1)
+Button(frameOperacionesMatrizB, text="Agregar Rectangulo", command=addRectanguloB).grid(row=3, column=0)
 Button(frameOperacionesMatrizB, text="Agregar Triangulo Rectangulo").grid(row=3, column=1)
+
+# datos para las operaciones
+Label(frameOperacionesMatrizB, text="Fila Inicio").grid(row=4, column=0)
+entry_filaInicioB = Entry(frameOperacionesMatrizB)
+entry_filaInicioB.grid(row=4, column=1)
+
+Label(frameOperacionesMatrizB, text="Columna Inicio").grid(row=5, column=0)
+entry_columnaInicioB = Entry(frameOperacionesMatrizB)
+entry_columnaInicioB.grid(row=5, column=1)
+
+Label(frameOperacionesMatrizB, text="Fila Fin").grid(row=6, column=0)
+entry_filaFinB = Entry(frameOperacionesMatrizB)
+entry_filaFinB.grid(row=6, column=1)
+
+Label(frameOperacionesMatrizB, text="Columna Fin").grid(row=7, column=0)
+entry_columnaFinB = Entry(frameOperacionesMatrizB)
+entry_columnaFinB.grid(row=7, column=1)
+
+Label(frameOperacionesMatrizB, text="Alto/Longitud de fila").grid(row=8, column=0)
+entry_altoLongB = Entry(frameOperacionesMatrizB)
+entry_altoLongB.grid(row=8, column=1)
+
+Label(frameOperacionesMatrizB, text="Ancho").grid(row=9, column=0)
+entry_anchoB = Entry(frameOperacionesMatrizB)
+entry_anchoB.grid(row=9, column=1)
+
 
 # botones operaciones entre matrices
 Button(frameOperaciones, text="Union A,B").pack()
@@ -259,7 +406,8 @@ Button(frameOperaciones, text="Diferencia A,B").pack()
 Button(frameOperaciones, text="Diferencia Simetrica A,B").pack()
 
 # botones operaciones matriz resultante
-Button(frameOpMR, text="Sustituir").pack()
+Button(frameOpMR, text="Sustituir en A").pack()
+Button(frameOpMR, text="Sustituir en B").pack()
 
 # Label signo igual y signo de operacion
 Label(frameOpIgual, text="=", font=("arial italic", 18)).grid(row=0, column=0)
