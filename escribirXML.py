@@ -10,7 +10,8 @@ def escribirArchivoXML(datos, ruta):
         for i in range(0, datos.size):
             filaa = matrizz.matriz.head
             elementoMatriz = ET.SubElement(elementoMatrices, "matriz", nombre=matrizz.nombre,
-                                           n=str(matrizz.matriz.size+1), m=str(matrizz.m), g=str(matrizz.matriz.size+1))
+                                           n=str(matrizz.matriz.size + 1), m=str(matrizz.m),
+                                           g=str(matrizz.matriz.size + 1))
             i = 1
             while filaa is not None:
                 dato = filaa.fila.head
@@ -43,15 +44,15 @@ def generarGrafica(datos, nombreMatriz):
                 dot = Digraph(comment='The Round Table')
                 dot.node('Matrices', 'matrices')
                 dot.node('Nombre', str(matrizz.nombre))
-                dot.node('n', 'n= '+str(matrizz.n))
-                dot.node('m', 'm= '+str(matrizz.m))
+                dot.node('n', 'n= ' + str(matrizz.n))
+                dot.node('m', 'm= ' + str(matrizz.m))
                 dot.edge('Matrices', 'Nombre')
                 dot.edge('Nombre', 'n')
                 dot.edge('Nombre', 'm')
                 filaa = matrizz.matriz.head
                 while filaa is not None:
                     dato = filaa.fila.head
-                    dot.node('fila'+str(filaa.fila.x), 'fila: '+str(filaa.fila.x))
+                    dot.node('fila' + str(filaa.fila.x), 'fila: ' + str(filaa.fila.x))
                     dot.edge('Nombre', 'fila' + str(filaa.fila.x))
 
                     dot.node('numero_' + str(filaa.fila.x) + "_" + str(dato.y), str(dato.numero))
@@ -70,4 +71,3 @@ def generarGrafica(datos, nombreMatriz):
 
     except Exception as e:
         print("Algo ocurrio: " + str(e))
-

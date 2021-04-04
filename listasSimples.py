@@ -4,8 +4,8 @@ class nodoDato:
         self.next = next
         self.y = y
 
-class Fila:
 
+class Fila:
     def __init__(self, no_fila=None):
         self.head = None  
         self.no_fila = no_fila
@@ -14,6 +14,7 @@ class Fila:
     def insertar(self, dato, y):
         if not self.head:
             self.head = nodoDato(dato=dato, y=y)
+            self.size += 1
             return
         current = self.head
         while current.next:
@@ -23,14 +24,12 @@ class Fila:
 
     def comprobarPosicion(self, y):
         current = self.head
-        while current.next is not self.head:
+        for i in range(self.size):
             if current.y == y:
-                if current.dato is not None:
-                    return True
-                else:
-                    return False
+                return True
             else:
                 current = current.next
+        return False
 
     def imprimir(self):
         nod = self.head
@@ -39,8 +38,8 @@ class Fila:
             print(nod.dato, end="|")
             nod = nod.next
 
-
 # --------------------------------------------------------------------------
+
 
 class nodoFila:
     def __init__(self, fila=None, next=None):
@@ -50,8 +49,9 @@ class nodoFila:
 
 class Matriz:
 
-    def __init__(self, filas=0, columnas=0):
+    def __init__(self, nombre=None, filas=0, columnas=0):
         self.head = None
+        self.nombre = nombre
         self.size = 0
         self.espaciosLlenos = 0
         self.espaciosVacios = 0
@@ -61,6 +61,7 @@ class Matriz:
     def insertar(self, fila):
         if not self.head:
             self.head = nodoFila(fila=fila)
+            self.size += 1
             return
         current = self.head
         while current.next:
@@ -70,23 +71,12 @@ class Matriz:
 
     def comprobarPosicion(self, x, y):
         nodo = self.head
-        while nodo.next is not self.head:
-            if nodo.fila.x == x:
+        for i in range(self.size):
+            if nodo.fila.no_fila == x:
                 return nodo.fila.comprobarPosicion(y)
             else:
                 nodo = nodo.next
-
-    def eliminarfila(self, x):
-        previous = self.head
-        current = previous.next
-        if self.head.fila.x == x:
-            self.head = self.head.next
-        else:
-            while current.fila.x != x:
-                previous = current
-                current = current.next
-            previous.next = current.next
-        self.size -= 1
+        return False
 
     def imprimir(self):
         nodo = self.head
@@ -97,9 +87,9 @@ class Matriz:
     def calcularEspaciosLlenos(self):
         nodo = self.head
         no_espacios = 0
-        while nodo.next is not self.head:
-            if nodo.fila.head is not None:
-                no_espacios += nodo.fila.size
+        while nodo is not None:
+            no_espacios += nodo.fila.size
+            nodo = nodo.next
         self.espaciosLlenos = no_espacios
 
     def calcularEspaciosVacios(self):

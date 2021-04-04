@@ -18,21 +18,16 @@ def leer_Archivo(ruta):
         columnas = int(elemento.getElementsByTagName('columnas')[0].firstChild.data)
         print(columnas)
         imagen = elemento.getElementsByTagName('imagen')[0].firstChild.data
-        print(imagen)
         imagen = quitar_FilasVacias(imagen)
-
+        print(imagen)
         if matrices.comprobar_Nombre(nombre):
-            matriz = Matriz(filas=filas, columnas=columnas)
+            matriz = Matriz(nombre=nombre, filas=filas, columnas=columnas)
             no_fila = 0
             lineas = imagen.strip("\n").split("\n")
-            print("linea")
-            print(lineas)
-
+            print(len(lineas))
             if len(lineas) <= int(filas):
                 for linea in lineas:
                     fila = Fila(no_fila)
-                    print("linea")
-                    print(linea)
                     no_columna = 0
                     if len(linea) <= int(columnas):
                         for dato in linea:
@@ -42,15 +37,15 @@ def leer_Archivo(ruta):
                             elif dato == "-":
                                 no_columna += 1
                         matriz.insertar(fila)
+                        no_fila += 1
 
                     else:
                         print("Linea con columnas fuera de rango")
-
                         matrizCorrecta = False
                 if matrizCorrecta:
                     matriz.calcularEspaciosLlenos()
                     matriz.calcularEspaciosVacios()
-                    matrices.insertar(matriz=matriz, nombre=nombre, n=filas, m=columnas)
+                    matrices.insertar(matriz=matriz, n=filas, m=columnas)
                 else:
                     print(f"Matriz {nombre} no ingresada verifique los datos")
             else:
@@ -58,7 +53,6 @@ def leer_Archivo(ruta):
         else:
             print(f"Matriz {nombre} con nombre repetido")
 
-    matrices.imprimir()
     return matrices
 
 

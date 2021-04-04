@@ -3,21 +3,39 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkinter.filedialog import askopenfilename
 from lectorXML import *
+from metodos import *
 
 ws = Tk()
 ws.title("Proyecto 2 IPC2")
 ws.iconbitmap('usacIcono.ico')
 ws.geometry("1000x750")
 
-global matrices
+matrices = linked_list_circular()
+global opciones
+opciones = []
 
 
 def escoger_archivo():
+    global matrices
     ws.filename = filedialog.askopenfilename(title="Seleccione el archivo",
                                              filetypes=(("Archivos XML", "*.xml"),
                                                         ("all files", "*.*")))
     if ws.filename != '':
         matrices = leer_Archivo(ws.filename)
+        matrices.imprimir()
+        global opciones
+        opciones = matrices.obtener_Nombres()
+        print(opciones)
+        global selecMA
+        clickedA.set("Ninguna")
+        selecMA.destroy()
+        selecMA = OptionMenu(frameSelecMA, clickedA, *opciones)
+        selecMA.grid(row=0, column=0)
+        global selecMB
+        clickedB.set("Ninguna")
+        selecMB.destroy()
+        selecMB = OptionMenu(frameSelecMB, clickedB, *opciones)
+        selecMB.grid(row=0, column=0)
     else:
         messagebox.showerror('Error', 'No se selecciono ningun archivo')
 
@@ -34,18 +52,66 @@ def documentacion():
     messagebox.showinfo('Datos del Estudiante', 'aun no hay :v ')
 
 
-def crearMatriz(frame, n, m, matriz):
-    for row in range(5):
-        for column in range(6):
-            if row == 0:
-                label = Entry(frame, text="Heading : " + str(column))
+def rotarHorizontalA():
+    matriz = matrices.obtener_Matriz(clickedA.get())
+    matrizOperada = rotarHorizontalmente(matriz)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizA()
+
+
+def rotarHorizontalB():
+    matriz = matrices.obtener_Matriz(clickedB.get())
+    matrizOperada = rotarHorizontalmente(matriz)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizB()
+
+
+def rotarVerticalA():
+    matriz = matrices.obtener_Matriz(clickedA.get())
+    matrizOperada = rotarVerticalmente(matriz)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizA()
+
+
+def rotarVerticalB():
+    matriz = matrices.obtener_Matriz(clickedB.get())
+    matrizOperada = rotarVerticalmente(matriz)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizB()
+
+
+def crearMatriz(frame, matriz):
+    for i in range(matriz.filas):
+        for j in range(matriz.columnas):
+            if matriz.comprobarPosicion(i, j):
+                label = Label(frame, text="*")
                 label.config(font=('Arial', 14))
-                label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
-                frame.grid_columnconfigure(column, weight=1)
+                label.grid(row=i, column=j, padx=1, pady=1)
+                frame.grid_columnconfigure(i, weight=1)
             else:
-                label = Entry(frame, text="Row : " + str(row) + " , Column : " + str(column))
-                label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
-                frame.grid_columnconfigure(column, weight=1)
+                label = Label(frame, text="-")
+                label.grid(row=i, column=j, padx=1, pady=1)
+                frame.grid_columnconfigure(j, weight=1)
+
+
+def cargarMatrizA():
+    matriz = matrices.obtener_Matriz(clickedA.get())
+    labelMA_Auxiliar.destroy()
+    global frameMatrizA
+    frameMatrizA.destroy()
+    frameMatrizA = LabelFrame(frameAreaMA, text='Matriz A')
+    frameMatrizA.grid(row=0, column=0)
+    crearMatriz(frameMatrizA, matriz)
+
+
+def cargarMatrizB():
+    matriz = matrices.obtener_Matriz(clickedB.get())
+    labelMB_Auxiliar.destroy()
+    global frameMatrizB
+    frameMatrizB.destroy()
+    frameMatrizB = LabelFrame(frameAreaMB, text='Matriz B')
+    frameMatrizB.grid(row=0, column=0)
+    crearMatriz(frameMatrizB, matriz)
 
 
 menubar = Menu(ws, background='#ff8000', foreground='black', activebackground='white', activeforeground='black')
@@ -75,9 +141,13 @@ frameTitulo.grid(row=0, column=0)
 
 Label(frameTitulo, text="Operadora de imagenes", font=("arial italic", 18)).pack()
 
+# frame de seleccion de matrices A y B
+frameMAB = Frame(ws)
+frameMAB.grid(row=1, column=0)
+
 # frame de principal
 framePrincipal = Frame(ws)
-framePrincipal.grid(row=1, column=0)
+framePrincipal.grid(row=2, column=0)
 
 # frame de operaciones y matriz A
 frameAreaMA = Frame(framePrincipal)
@@ -131,16 +201,40 @@ frameSignoOperaciones.grid(row=0, column=0)
 frameOperaciones = LabelFrame(frameAreaOp, text='Operaciones entre matrices A,B')
 frameOperaciones.grid(row=1, column=0)
 
+# frame de seleccion matriz A
+frameSelecMA = LabelFrame(frameMAB, text='Seleccione la matriz A')
+frameSelecMA.grid(row=0, column=0)
+
+# frame de seleccion matriz B
+frameSelecMB = LabelFrame(frameMAB, text='Seleccione la matriz B')
+frameSelecMB.grid(row=0, column=1)
+
+
+# combo box y botones de carga de matrices y seleccion de matrices A y B
+clickedA = StringVar()
+clickedA.set("Ninguna")
+selecMA = OptionMenu(frameSelecMA, clickedA, opciones)
+selecMA.grid(row=0, column=0)
+Button(frameSelecMA, text="Cargar Matriz A", command=cargarMatrizA).grid(row=1, column=0)
+
+clickedB = StringVar()
+clickedB.set("Ninguna")
+selecMB = OptionMenu(frameSelecMB, clickedB, opciones)
+selecMB.grid(row=0, column=0)
+Button(frameSelecMB, text="Cargar Matriz B", command=cargarMatrizB).grid(row=1, column=0)
+
 # matriz A
-Label(frameMatrizA, text="Matriz A, en construccion", font=("arial italic", 10)).grid(row=0, column=0)
+labelMA_Auxiliar = Label(frameMatrizA, text="Matriz A, en construccion", font=("arial italic", 10))
+labelMA_Auxiliar.grid(row=0, column=0)
 # matriz B
-Label(frameMatrizB, text="Matriz B, en construccion", font=("arial italic", 10)).grid(row=0, column=0)
+labelMB_Auxiliar = Label(frameMatrizB, text="Matriz B, en construccion", font=("arial italic", 10))
+labelMB_Auxiliar.grid(row=0, column=0)
 # matriz Resultante
 Label(frameMatrizR, text="Matriz Resultante, en construccion", font=("arial italic", 10)).grid(row=0, column=0)
 
 # botones matriz A
-Button(frameOperacionesMatrizA, text="Rotacion Horizontal").grid(row=0, column=0)
-Button(frameOperacionesMatrizA, text="Rotacion Vertical").grid(row=0, column=1)
+Button(frameOperacionesMatrizA, text="Rotacion Horizontal", command=rotarHorizontalA).grid(row=0, column=0)
+Button(frameOperacionesMatrizA, text="Rotacion Vertical", command=rotarVerticalA).grid(row=0, column=1)
 Button(frameOperacionesMatrizA, text="Transpuesta").grid(row=1, column=0)
 Button(frameOperacionesMatrizA, text="Limpiar Zona").grid(row=1, column=1)
 Button(frameOperacionesMatrizA, text="Linea Horizontal").grid(row=2, column=0)
@@ -149,8 +243,8 @@ Button(frameOperacionesMatrizA, text="Agregar Rectangulo").grid(row=3, column=0)
 Button(frameOperacionesMatrizA, text="Agregar Triangulo Rectangulo").grid(row=3, column=1)
 
 # botones matriz B
-Button(frameOperacionesMatrizB, text="Rotacion Horizontal").grid(row=0, column=0)
-Button(frameOperacionesMatrizB, text="Rotacion Vertical").grid(row=0, column=1)
+Button(frameOperacionesMatrizB, text="Rotacion Horizontal", command=rotarHorizontalB).grid(row=0, column=0)
+Button(frameOperacionesMatrizB, text="Rotacion Vertical", command=rotarVerticalB).grid(row=0, column=1)
 Button(frameOperacionesMatrizB, text="Transpuesta").grid(row=1, column=0)
 Button(frameOperacionesMatrizB, text="Limpiar Zona").grid(row=1, column=1)
 Button(frameOperacionesMatrizB, text="Linea Horizontal").grid(row=2, column=0)
