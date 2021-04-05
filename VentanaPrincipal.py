@@ -13,7 +13,7 @@ ws.geometry("1000x750")
 matrices = linked_list_circular()
 global opciones
 opciones = []
-
+matrizResultante = None
 
 def escoger_archivo():
     global matrices
@@ -167,6 +167,17 @@ def addRectanguloA():
     cargarMatrizA()
 
 
+def addTrianguloA():
+    matriz = matrices.obtener_Matriz(clickedA.get())
+    filaInicio = int(entry_filaInicioA.get())
+    columnaInicio = int(entry_columnaInicioA.get())
+    alto = int(entry_altoLongA.get())
+    ancho = int(entry_anchoA.get())
+    matrizOperada = agregarTrianguloRectangulo(matriz, filaInicio, columnaInicio, alto, ancho)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizA()
+
+
 def addRectanguloB():
     matriz = matrices.obtener_Matriz(clickedB.get())
     filaInicio = int(entry_filaInicioB.get())
@@ -176,6 +187,49 @@ def addRectanguloB():
     matrizOperada = agregarRectangulo(matriz, filaInicio, columnaInicio, alto, ancho)
     matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizB()
+
+
+def addTrianguloB():
+    matriz = matrices.obtener_Matriz(clickedB.get())
+    filaInicio = int(entry_filaInicioB.get())
+    columnaInicio = int(entry_columnaInicioB.get())
+    alto = int(entry_altoLongB.get())
+    ancho = int(entry_anchoB.get())
+    matrizOperada = agregarTrianguloRectangulo(matriz, filaInicio, columnaInicio, alto, ancho)
+    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizB()
+
+
+def unionAB():
+    matrizA = matrices.obtener_Matriz(clickedA.get())
+    matrizB = matrices.obtener_Matriz(clickedB.get())
+    matrizResultante = unionMatrizAB(matrizA, matrizB)
+    # matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizR(matrizResultante)
+
+
+def interseccionAB():
+    matrizA = matrices.obtener_Matriz(clickedA.get())
+    matrizB = matrices.obtener_Matriz(clickedB.get())
+    matrizResultante = interseccionMatrizAB(matrizA, matrizB)
+    # matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizR(matrizResultante)
+
+
+def diferenciaAB():
+    matrizA = matrices.obtener_Matriz(clickedA.get())
+    matrizB = matrices.obtener_Matriz(clickedB.get())
+    matrizResultante = diferenciaMatrizAB(matrizA, matrizB)
+    # matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizR(matrizResultante)
+
+
+def diferenciaSimetricaAB():
+    matrizA = matrices.obtener_Matriz(clickedA.get())
+    matrizB = matrices.obtener_Matriz(clickedB.get())
+    matrizResultante = diferenciaSimetricaMatrizAB(matrizA, matrizB)
+    # matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+    cargarMatrizR(matrizResultante)
 
 
 def crearMatriz(frame, matriz):
@@ -210,6 +264,15 @@ def cargarMatrizB():
     frameMatrizB = LabelFrame(frameAreaMB, text='Matriz B')
     frameMatrizB.grid(row=0, column=0)
     crearMatriz(frameMatrizB, matriz)
+
+
+def cargarMatrizR(matriz):
+    labelMB_Auxiliar.destroy()
+    global frameMatrizR
+    frameMatrizR.destroy()
+    frameMatrizR = LabelFrame(frameMatrizResultante, text='Matriz Resultante')
+    frameMatrizR.grid(row=0, column=0)
+    crearMatriz(frameMatrizR, matriz)
 
 
 menubar = Menu(ws, background='#ff8000', foreground='black', activebackground='white', activeforeground='black')
@@ -329,7 +392,7 @@ labelMB_Auxiliar.grid(row=0, column=0)
 # matriz Resultante
 Label(frameMatrizR, text="Matriz Resultante, en construccion", font=("arial italic", 10)).grid(row=0, column=0)
 
-# botones matriz A
+# botones matriz A---------------------------------------------------------------------
 Button(frameOperacionesMatrizA, text="Rotacion Horizontal", command=rotarHorizontalA).grid(row=0, column=0)
 Button(frameOperacionesMatrizA, text="Rotacion Vertical", command=rotarVerticalA).grid(row=0, column=1)
 Button(frameOperacionesMatrizA, text="Transpuesta", command=transpuestaA).grid(row=1, column=0)
@@ -337,7 +400,7 @@ Button(frameOperacionesMatrizA, text="Limpiar Zona", command=limpiarZonaA).grid(
 Button(frameOperacionesMatrizA, text="Linea Horizontal", command=addLineaHorizontalA).grid(row=2, column=0)
 Button(frameOperacionesMatrizA, text="Linea Vertical", command=addLineaVerticalA).grid(row=2, column=1)
 Button(frameOperacionesMatrizA, text="Agregar Rectangulo", command=addRectanguloA).grid(row=3, column=0)
-Button(frameOperacionesMatrizA, text="Agregar Triangulo Rectangulo").grid(row=3, column=1)
+Button(frameOperacionesMatrizA, text="Agregar Triangulo Rectangulo", command=addTrianguloA).grid(row=3, column=1)
 # datos para las operaciones
 Label(frameOperacionesMatrizA, text="Fila Inicio").grid(row=4, column=0)
 entry_filaInicioA = Entry(frameOperacionesMatrizA)
@@ -363,7 +426,7 @@ Label(frameOperacionesMatrizA, text="Ancho").grid(row=9, column=0)
 entry_anchoA = Entry(frameOperacionesMatrizA)
 entry_anchoA.grid(row=9, column=1)
 
-# botones matriz B
+# botones matriz B---------------------------------------------------------------------
 Button(frameOperacionesMatrizB, text="Rotacion Horizontal", command=rotarHorizontalB).grid(row=0, column=0)
 Button(frameOperacionesMatrizB, text="Rotacion Vertical", command=rotarVerticalB).grid(row=0, column=1)
 Button(frameOperacionesMatrizB, text="Transpuesta", command=transpuestaB).grid(row=1, column=0)
@@ -371,7 +434,7 @@ Button(frameOperacionesMatrizB, text="Limpiar Zona", command=limpiarZonaB).grid(
 Button(frameOperacionesMatrizB, text="Linea Horizontal", command=addLineaHorizontalB).grid(row=2, column=0)
 Button(frameOperacionesMatrizB, text="Linea Vertical", command=addLineaVerticalB).grid(row=2, column=1)
 Button(frameOperacionesMatrizB, text="Agregar Rectangulo", command=addRectanguloB).grid(row=3, column=0)
-Button(frameOperacionesMatrizB, text="Agregar Triangulo Rectangulo").grid(row=3, column=1)
+Button(frameOperacionesMatrizB, text="Agregar Triangulo Rectangulo", command=addTrianguloB).grid(row=3, column=1)
 
 # datos para las operaciones
 Label(frameOperacionesMatrizB, text="Fila Inicio").grid(row=4, column=0)
@@ -399,11 +462,11 @@ entry_anchoB = Entry(frameOperacionesMatrizB)
 entry_anchoB.grid(row=9, column=1)
 
 
-# botones operaciones entre matrices
-Button(frameOperaciones, text="Union A,B").pack()
-Button(frameOperaciones, text="Interseccion A,B").pack()
-Button(frameOperaciones, text="Diferencia A,B").pack()
-Button(frameOperaciones, text="Diferencia Simetrica A,B").pack()
+# botones operaciones entre matrices -------------------------------------------------------------
+Button(frameOperaciones, text="Union A,B", command=unionAB).pack()
+Button(frameOperaciones, text="Interseccion A,B", command=interseccionAB).pack()
+Button(frameOperaciones, text="Diferencia A,B", command=diferenciaAB).pack()
+Button(frameOperaciones, text="Diferencia Simetrica A,B", command=diferenciaSimetricaAB).pack()
 
 # botones operaciones matriz resultante
 Button(frameOpMR, text="Sustituir en A").pack()

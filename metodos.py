@@ -41,8 +41,8 @@ def transpuestaMatriz(matriz):
 
 def limpiarZona(matriz, filaInicio, columnaInicio, filaFin, columnaFin):
     matrizNueva = crearMatriz(matriz, matriz.filas, matriz.columnas)
-    for i in range(filaInicio-1, filaFin):
-        for j in range(columnaInicio-1, columnaFin):
+    for i in range(filaInicio - 1, filaFin):
+        for j in range(columnaInicio - 1, columnaFin):
             matrizNueva[i][j] = "-"
     matrizOperada = crearMatrizOrtogonal(matrizNueva, matriz)
     return matrizOperada
@@ -50,8 +50,8 @@ def limpiarZona(matriz, filaInicio, columnaInicio, filaFin, columnaFin):
 
 def agregarLineaHorizontal(matriz, filaInicio, columnaInicio, longitud):
     matrizNueva = crearMatriz(matriz, matriz.filas, matriz.columnas)
-    for j in range((columnaInicio-1), (columnaInicio+longitud-1)):
-        matrizNueva[filaInicio-1][j] = "*"
+    for j in range((columnaInicio - 1), (columnaInicio + longitud - 1)):
+        matrizNueva[filaInicio - 1][j] = "*"
     matrizOperada = crearMatrizOrtogonal(matrizNueva, matriz)
 
     return matrizOperada
@@ -60,7 +60,7 @@ def agregarLineaHorizontal(matriz, filaInicio, columnaInicio, longitud):
 def agregarLineaVertical(matriz, filaInicio, columnaInicio, longitud):
     matrizNueva = crearMatriz(matriz, matriz.filas, matriz.columnas)
     for i in range((filaInicio - 1), (filaInicio + longitud - 1)):
-        matrizNueva[i][columnaInicio-1] = "*"
+        matrizNueva[i][columnaInicio - 1] = "*"
     matrizOperada = crearMatrizOrtogonal(matrizNueva, matriz)
 
     return matrizOperada
@@ -78,6 +78,131 @@ def agregarRectangulo(matriz, filaInicio, columnaInicio, alto, ancho):
 
 def agregarTrianguloRectangulo(matriz, filaInicio, columnaInicio, alto, ancho):
     print("en construccion")
+    matrizNueva = crearMatriz(matriz, matriz.filas, matriz.columnas)
+    k = 1
+    for i in range(filaInicio - 1, (filaInicio + alto - 1)):
+
+        for j in range(k):
+            for n in range(columnaInicio - 1, columnaInicio + k - 1):
+                matrizNueva[i][n] = "*"
+        k += 1
+
+    for fila in matrizNueva:
+        for elemento in fila:
+            print(elemento, end=" ")
+        print("\n")
+
+    matrizOperada = crearMatrizOrtogonal(matrizNueva, matriz)
+    return matrizOperada
+
+
+def unionMatrizAB(matrizA, matrizB):
+    n = 0
+    m = 0
+    if matrizA.filas > matrizB.filas:
+        n = matrizA.filas
+    else:
+        n = matrizB.filas
+
+    if matrizA.columnas > matrizB.columnas:
+        m = matrizA.columnas
+    else:
+        m = matrizB.columnas
+    matrizNueva = crearMatrizVacia(n, m)
+
+    for i in range(len(matrizNueva)):
+        for j in range(len(matrizNueva[0])):
+            if matrizA.comprobarPosicion(i, j) or matrizB.comprobarPosicion(i, j):
+                matrizNueva[i][j] = "*"
+            else:
+                matrizNueva[i][j] = "-"
+    matrizDatos = Matriz(nombre=matrizB.nombre + "-" + matrizB.nombre, filas=n, columnas=m)
+    matrizOperada = crearMatrizOrtogonal(matrizNueva, matrizDatos)
+    return matrizOperada
+
+
+def interseccionMatrizAB(matrizA, matrizB):
+    n = 0
+    m = 0
+    if matrizA.filas > matrizB.filas:
+        n = matrizA.filas
+    else:
+        n = matrizB.filas
+
+    if matrizA.columnas > matrizB.columnas:
+        m = matrizA.columnas
+    else:
+        m = matrizB.columnas
+    matrizNueva = crearMatrizVacia(n, m)
+
+    for i in range(len(matrizNueva)):
+        for j in range(len(matrizNueva[0])):
+            if matrizA.comprobarPosicion(i, j) and matrizB.comprobarPosicion(i, j):
+                matrizNueva[i][j] = "*"
+            else:
+                matrizNueva[i][j] = "-"
+    matrizDatos = Matriz(nombre=matrizB.nombre + "-" + matrizB.nombre, filas=n, columnas=m)
+    matrizOperada = crearMatrizOrtogonal(matrizNueva, matrizDatos)
+    return matrizOperada
+
+
+def diferenciaMatrizAB(matrizA, matrizB):
+    n = 0
+    m = 0
+    if matrizA.filas > matrizB.filas:
+        n = matrizA.filas
+    else:
+        n = matrizB.filas
+
+    if matrizA.columnas > matrizB.columnas:
+        m = matrizA.columnas
+    else:
+        m = matrizB.columnas
+    matrizNueva = crearMatrizVacia(n, m)
+
+    for i in range(len(matrizNueva)):
+        for j in range(len(matrizNueva[0])):
+            if matrizA.comprobarPosicion(i, j) and not matrizB.comprobarPosicion(i, j):
+                matrizNueva[i][j] = "*"
+
+            else:
+                matrizNueva[i][j] = "-"
+    matrizDatos = Matriz(nombre=matrizB.nombre + "-" + matrizB.nombre, filas=n, columnas=m)
+    matrizOperada = crearMatrizOrtogonal(matrizNueva, matrizDatos)
+    return matrizOperada
+
+
+def diferenciaSimetricaMatrizAB(matrizA, matrizB):
+    n = 0
+    m = 0
+    if matrizA.filas > matrizB.filas:
+        n = matrizA.filas
+    else:
+        n = matrizB.filas
+
+    if matrizA.columnas > matrizB.columnas:
+        m = matrizA.columnas
+    else:
+        m = matrizB.columnas
+    matrizNueva = crearMatrizVacia(n, m)
+
+    for i in range(len(matrizNueva)):
+        for j in range(len(matrizNueva[0])):
+            if matrizA.comprobarPosicion(i, j):
+                if not matrizB.comprobarPosicion(i, j):
+                    matrizNueva[i][j] = "*"
+                else:
+                    matrizNueva[i][j] = "-"
+            elif matrizB.comprobarPosicion(i, j):
+                if not matrizA.comprobarPosicion(i, j):
+                    matrizNueva[i][j] = "*"
+                else:
+                    matrizNueva[i][j] = "-"
+            else:
+                matrizNueva[i][j] = "-"
+    matrizDatos = Matriz(nombre=matrizB.nombre + "-" + matrizB.nombre, filas=n, columnas=m)
+    matrizOperada = crearMatrizOrtogonal(matrizNueva, matrizDatos)
+    return matrizOperada
 
 
 def crearMatriz(mat, n, m):
