@@ -1,9 +1,13 @@
+import time
 from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog
-from tkinter.filedialog import askopenfilename
+from PIL import ImageTk, Image
 from lectorXML import *
 from metodos import *
+from objetos import *
+from escribirHTML import *
+import metodos
 
 ws = Tk()
 ws.title("Proyecto 2 IPC2")
@@ -14,6 +18,8 @@ matrices = linked_list_circular()
 global opciones
 opciones = []
 matrizResultante = None
+reportes = []
+
 
 def escoger_archivo():
     global matrices
@@ -36,7 +42,16 @@ def escoger_archivo():
         selecMB.destroy()
         selecMB = OptionMenu(frameSelecMB, clickedB, *opciones)
         selecMB.grid(row=0, column=0)
+
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Archivos Cargados",
+                          "Carga de Archivos",
+                          opciones
+                          )
+        reportes.append(reporte)
     else:
+
         messagebox.showerror('Error', 'No se selecciono ningun archivo')
 
 
@@ -57,6 +72,14 @@ def rotarHorizontalA():
     matrizOperada = rotarHorizontalmente(matriz)
     matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizA()
+    nombres = [matriz.nombre]
+    reporte = Reporte(time.strftime("%d/%m/%y"),
+                      time.strftime("%H:%M:%S"),
+                      "Matriz rotada horizontalmente de manera correcta",
+                      "Rotacion Horizontal",
+                      nombres
+                      )
+    reportes.append(reporte)
 
 
 def rotarHorizontalB():
@@ -64,6 +87,14 @@ def rotarHorizontalB():
     matrizOperada = rotarHorizontalmente(matriz)
     matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizB()
+    nombres = [matriz.nombre]
+    reporte = Reporte(time.strftime("%d/%m/%y"),
+                      time.strftime("%H:%M:%S"),
+                      "Matriz rotada horizontalmente de manera correcta",
+                      "Rotacion Horizontal",
+                      nombres
+                      )
+    reportes.append(reporte)
 
 
 def rotarVerticalA():
@@ -71,6 +102,14 @@ def rotarVerticalA():
     matrizOperada = rotarVerticalmente(matriz)
     matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizA()
+    nombres = [matriz.nombre]
+    reporte = Reporte(time.strftime("%d/%m/%y"),
+                      time.strftime("%H:%M:%S"),
+                      "Matriz rotada verticalmente de manera correcta",
+                      "Rotacion Vertical",
+                      nombres
+                      )
+    reportes.append(reporte)
 
 
 def rotarVerticalB():
@@ -78,6 +117,14 @@ def rotarVerticalB():
     matrizOperada = rotarVerticalmente(matriz)
     matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizB()
+    nombres = [matriz.nombre]
+    reporte = Reporte(time.strftime("%d/%m/%y"),
+                      time.strftime("%H:%M:%S"),
+                      "Matriz rotada verticalmente de manera correcta",
+                      "Rotacion Vertical",
+                      nombres
+                      )
+    reportes.append(reporte)
 
 
 def transpuestaA():
@@ -85,6 +132,14 @@ def transpuestaA():
     matrizOperada = transpuestaMatriz(matriz)
     matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizA()
+    nombres = [matriz.nombre]
+    reporte = Reporte(time.strftime("%d/%m/%y"),
+                      time.strftime("%H:%M:%S"),
+                      "Matriz transpuesta de manera correcta",
+                      "Transpuesta",
+                      nombres
+                      )
+    reportes.append(reporte)
 
 
 def transpuestaB():
@@ -92,6 +147,14 @@ def transpuestaB():
     matrizOperada = transpuestaMatriz(matriz)
     matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizB()
+    nombres = [matriz.nombre]
+    reporte = Reporte(time.strftime("%d/%m/%y"),
+                      time.strftime("%H:%M:%S"),
+                      "Matriz transpuesta de manera correcta",
+                      "Transpuesta",
+                      nombres
+                      )
+    reportes.append(reporte)
 
 
 def limpiarZonaA():
@@ -100,9 +163,28 @@ def limpiarZonaA():
     columnaInicio = int(entry_columnaInicioA.get())
     filaFin = int(entry_filaFinA.get())
     columnaFin = int(entry_columnaFinA.get())
-    matrizOperada = limpiarZona(matriz, filaInicio, columnaInicio, filaFin, columnaFin)
-    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
-    cargarMatrizA()
+    if 0 < filaInicio <= matriz.filas and 0 < columnaInicio <= matriz.filas and 0 < filaFin <= matriz.filas and 0 < columnaFin <= matriz.filas:
+        matrizOperada = limpiarZona(matriz, filaInicio, columnaInicio, filaFin, columnaFin)
+        matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+        cargarMatrizA()
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Matriz Limpiada Correctamente",
+                          "Limpiar Zona",
+                          nombres
+                          )
+        reportes.append(reporte)
+    else:
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Limites incorrectos",
+                          "Limpiar Zona",
+                          nombres
+                          )
+        reportes.append(reporte)
+        messagebox.showerror('Error', 'Limites incorrectos')
 
 
 def limpiarZonaB():
@@ -111,9 +193,28 @@ def limpiarZonaB():
     columnaInicio = int(entry_columnaInicioB.get())
     filaFin = int(entry_filaFinB.get())
     columnaFin = int(entry_columnaFinB.get())
-    matrizOperada = limpiarZona(matriz, filaInicio, columnaInicio, filaFin, columnaFin)
-    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
-    cargarMatrizB()
+    if 0 < filaInicio <= matriz.filas and 0 < columnaInicio <= matriz.filas and 0 < filaFin <= matriz.filas and 0 < columnaFin <= matriz.filas:
+        matrizOperada = limpiarZona(matriz, filaInicio, columnaInicio, filaFin, columnaFin)
+        matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+        cargarMatrizB()
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Matriz Limpiada Correctamente",
+                          "Limpiar Zona",
+                          nombres
+                          )
+        reportes.append(reporte)
+    else:
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Limites incorrectos",
+                          "Limpiar Zona",
+                          nombres
+                          )
+        reportes.append(reporte)
+        messagebox.showerror('Error', 'Limites incorrectos')
 
 
 def addLineaHorizontalA():
@@ -121,9 +222,29 @@ def addLineaHorizontalA():
     filaInicio = int(entry_filaInicioA.get())
     columnaInicio = int(entry_columnaInicioA.get())
     longitud = int(entry_altoLongA.get())
-    matrizOperada = agregarLineaHorizontal(matriz, filaInicio, columnaInicio, longitud)
-    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
-    cargarMatrizA()
+    posFin = columnaInicio + longitud
+    if 0 < filaInicio <= matriz.filas and 0 < columnaInicio <= matriz.filas and 0 < posFin <= matriz.filas:
+        matrizOperada = agregarLineaHorizontal(matriz, filaInicio, columnaInicio, longitud)
+        matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+        cargarMatrizA()
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Linea horizonal agregada correctamente",
+                          "Agregar linea horizontal",
+                          nombres
+                          )
+        reportes.append(reporte)
+    else:
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Limites incorrectos",
+                          "Agregar linea horizontal",
+                          nombres
+                          )
+        reportes.append(reporte)
+        messagebox.showerror('Error', 'Limites incorrectos')
 
 
 def addLineaVerticalA():
@@ -131,9 +252,29 @@ def addLineaVerticalA():
     filaInicio = int(entry_filaInicioA.get())
     columnaInicio = int(entry_columnaInicioA.get())
     longitud = int(entry_altoLongA.get())
-    matrizOperada = agregarLineaVertical(matriz, filaInicio, columnaInicio, longitud)
-    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
-    cargarMatrizA()
+    posFin = filaInicio + longitud
+    if 0 < filaInicio <= matriz.filas and 0 < columnaInicio <= matriz.filas and 0 < posFin <= matriz.filas:
+        matrizOperada = agregarLineaVertical(matriz, filaInicio, columnaInicio, longitud)
+        matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+        cargarMatrizA()
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Linea vertical agregada correctamente",
+                          "Agregar linea vertical",
+                          nombres
+                          )
+        reportes.append(reporte)
+    else:
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Limites incorrectos",
+                          "Agregar linea vertical",
+                          nombres
+                          )
+        reportes.append(reporte)
+        messagebox.showerror('Error', 'Limites incorrectos')
 
 
 def addLineaHorizontalB():
@@ -141,9 +282,29 @@ def addLineaHorizontalB():
     filaInicio = int(entry_filaInicioB.get())
     columnaInicio = int(entry_columnaInicioB.get())
     longitud = int(entry_altoLongB.get())
-    matrizOperada = agregarLineaHorizontal(matriz, filaInicio, columnaInicio, longitud)
-    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
-    cargarMatrizB()
+    posFin = columnaInicio + longitud
+    if 0 < filaInicio <= matriz.filas and 0 < columnaInicio <= matriz.filas and 0 < posFin <= matriz.filas:
+        matrizOperada = agregarLineaHorizontal(matriz, filaInicio, columnaInicio, longitud)
+        matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+        cargarMatrizB()
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Linea horizontal agregada correctamente",
+                          "Agregar linea horizontal",
+                          nombres
+                          )
+        reportes.append(reporte)
+    else:
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Limites incorrectos",
+                          "Agregar linea horizontal",
+                          nombres
+                          )
+        reportes.append(reporte)
+        messagebox.showerror('Error', 'Limites incorrectos')
 
 
 def addLineaVerticalB():
@@ -151,9 +312,29 @@ def addLineaVerticalB():
     filaInicio = int(entry_filaInicioB.get())
     columnaInicio = int(entry_columnaInicioB.get())
     longitud = int(entry_altoLongB.get())
-    matrizOperada = agregarLineaVertical(matriz, filaInicio, columnaInicio, longitud)
-    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
-    cargarMatrizB()
+    posFin = filaInicio + longitud
+    if 0 < filaInicio <= matriz.filas and 0 < columnaInicio <= matriz.filas and 0 < posFin <= matriz.filas:
+        matrizOperada = agregarLineaVertical(matriz, filaInicio, columnaInicio, longitud)
+        matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+        cargarMatrizB()
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Linea vertical agregada correctamente",
+                          "Agregar linea vertical",
+                          nombres
+                          )
+        reportes.append(reporte)
+    else:
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Limites incorrectos",
+                          "Agregar linea vertical",
+                          nombres
+                          )
+        reportes.append(reporte)
+        messagebox.showerror('Error', 'Limites incorrectos')
 
 
 def addRectanguloA():
@@ -162,9 +343,30 @@ def addRectanguloA():
     columnaInicio = int(entry_columnaInicioA.get())
     alto = int(entry_altoLongA.get())
     ancho = int(entry_anchoA.get())
-    matrizOperada = agregarRectangulo(matriz, filaInicio, columnaInicio, alto, ancho)
-    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
-    cargarMatrizA()
+    posFin = filaInicio + alto
+    posFin2 = columnaInicio + ancho
+    if 0 < filaInicio <= matriz.filas and 0 < columnaInicio <= matriz.filas and 0 < posFin <= matriz.filas and 0 < posFin2 <= matriz.filas:
+        matrizOperada = agregarRectangulo(matriz, filaInicio, columnaInicio, alto, ancho)
+        matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+        cargarMatrizA()
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Rectangulo agregada correctamente",
+                          "Agregar rectangulo",
+                          nombres
+                          )
+        reportes.append(reporte)
+    else:
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Limites incorrectos",
+                          "Agregar rectangulo",
+                          nombres
+                          )
+        reportes.append(reporte)
+        messagebox.showerror('Error', 'Limites incorrectos')
 
 
 def addTrianguloA():
@@ -173,9 +375,30 @@ def addTrianguloA():
     columnaInicio = int(entry_columnaInicioA.get())
     alto = int(entry_altoLongA.get())
     ancho = int(entry_anchoA.get())
-    matrizOperada = agregarTrianguloRectangulo(matriz, filaInicio, columnaInicio, alto, ancho)
-    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
-    cargarMatrizA()
+    posFin = filaInicio + alto
+    posFin2 = columnaInicio + ancho
+    if 0 < filaInicio <= matriz.filas and 0 < columnaInicio <= matriz.filas and 0 < posFin <= matriz.filas and 0 < posFin2 <= matriz.filas:
+        matrizOperada = agregarTrianguloRectangulo(matriz, filaInicio, columnaInicio, alto, ancho)
+        matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+        cargarMatrizA()
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Triangulo rectangulo agregada correctamente",
+                          "Agregar triangulo rectangulo",
+                          nombres
+                          )
+        reportes.append(reporte)
+    else:
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Limites incorrectos",
+                          "Agregar triangulo rectangulo",
+                          nombres
+                          )
+        reportes.append(reporte)
+        messagebox.showerror('Error', 'Limites incorrectos')
 
 
 def addRectanguloB():
@@ -184,9 +407,30 @@ def addRectanguloB():
     columnaInicio = int(entry_columnaInicioB.get())
     alto = int(entry_altoLongB.get())
     ancho = int(entry_anchoB.get())
-    matrizOperada = agregarRectangulo(matriz, filaInicio, columnaInicio, alto, ancho)
-    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
-    cargarMatrizB()
+    posFin = filaInicio + alto
+    posFin2 = columnaInicio + ancho
+    if 0 < filaInicio <= matriz.filas and 0 < columnaInicio <= matriz.filas and 0 < posFin <= matriz.filas and 0 < posFin2 <= matriz.filas:
+        matrizOperada = agregarRectangulo(matriz, filaInicio, columnaInicio, alto, ancho)
+        matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+        cargarMatrizB()
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Rectangulo agregada correctamente",
+                          "Agregar rectangulo",
+                          nombres
+                          )
+        reportes.append(reporte)
+    else:
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Limites incorrectos",
+                          "Agregar rectangulo",
+                          nombres
+                          )
+        reportes.append(reporte)
+        messagebox.showerror('Error', 'Limites incorrectos')
 
 
 def addTrianguloB():
@@ -195,9 +439,30 @@ def addTrianguloB():
     columnaInicio = int(entry_columnaInicioB.get())
     alto = int(entry_altoLongB.get())
     ancho = int(entry_anchoB.get())
-    matrizOperada = agregarTrianguloRectangulo(matriz, filaInicio, columnaInicio, alto, ancho)
-    matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
-    cargarMatrizB()
+    posFin = filaInicio + alto
+    posFin2 = columnaInicio + ancho
+    if 0 < filaInicio <= matriz.filas and 0 < columnaInicio <= matriz.filas and 0 < posFin <= matriz.filas and 0 < posFin2 <= matriz.filas:
+        matrizOperada = agregarTrianguloRectangulo(matriz, filaInicio, columnaInicio, alto, ancho)
+        matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
+        cargarMatrizB()
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Triangulo rectangulo agregada correctamente",
+                          "Agregar triangulo rectangulo",
+                          nombres
+                          )
+        reportes.append(reporte)
+    else:
+        nombres = [matriz.nombre]
+        reporte = Reporte(time.strftime("%d/%m/%y"),
+                          time.strftime("%H:%M:%S"),
+                          "Limites incorrectos",
+                          "Agregar triangulo rectangulo",
+                          nombres
+                          )
+        reportes.append(reporte)
+        messagebox.showerror('Error', 'Limites incorrectos')
 
 
 def unionAB():
@@ -206,6 +471,14 @@ def unionAB():
     matrizResultante = unionMatrizAB(matrizA, matrizB)
     # matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizR(matrizResultante)
+    nombres = [matrizA.nombre, matrizB.nombre]
+    reporte = Reporte(time.strftime("%d/%m/%y"),
+                      time.strftime("%H:%M:%S"),
+                      "Union A y B correcta",
+                      "Union A,B",
+                      nombres
+                      )
+    reportes.append(reporte)
 
 
 def interseccionAB():
@@ -214,6 +487,14 @@ def interseccionAB():
     matrizResultante = interseccionMatrizAB(matrizA, matrizB)
     # matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizR(matrizResultante)
+    nombres = [matrizA.nombre, matrizB.nombre]
+    reporte = Reporte(time.strftime("%d/%m/%y"),
+                      time.strftime("%H:%M:%S"),
+                      "Interseccion A y B correcta",
+                      "Interseccion A,B",
+                      nombres
+                      )
+    reportes.append(reporte)
 
 
 def diferenciaAB():
@@ -222,6 +503,14 @@ def diferenciaAB():
     matrizResultante = diferenciaMatrizAB(matrizA, matrizB)
     # matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizR(matrizResultante)
+    nombres = [matrizA.nombre, matrizB.nombre]
+    reporte = Reporte(time.strftime("%d/%m/%y"),
+                      time.strftime("%H:%M:%S"),
+                      "Diferencia A y B correcta",
+                      "Diferencia A,B",
+                      nombres
+                      )
+    reportes.append(reporte)
 
 
 def diferenciaSimetricaAB():
@@ -230,9 +519,44 @@ def diferenciaSimetricaAB():
     matrizResultante = diferenciaSimetricaMatrizAB(matrizA, matrizB)
     # matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizR(matrizResultante)
+    nombres = [matrizA.nombre, matrizB.nombre]
+    reporte = Reporte(time.strftime("%d/%m/%y"),
+                      time.strftime("%H:%M:%S"),
+                      "Diferencia simetrica A y B correcta",
+                      "Diferencia Simetrica A,B",
+                      nombres
+                      )
+    reportes.append(reporte)
 
 
-def crearMatriz(frame, matriz):
+def sustituirA():
+    matrizA = matrices.obtener_Matriz(clickedA.get())
+    matrices.reemplazar_Matriz(matrizA.nombre, matrizResultante)
+    nombres = [matrizA.nombre, matrizResultante.nombre]
+    reporte = Reporte(time.strftime("%d/%m/%y"),
+                      time.strftime("%H:%M:%S"),
+                      "Matriz resultante sustituida en matriz A",
+                      "Sustituir en A",
+                      nombres
+                      )
+    reportes.append(reporte)
+
+
+def sustituirB():
+    matrizB = matrices.obtener_Matriz(clickedB.get())
+    matrices.reemplazar_Matriz(matrizB.nombre, matrizResultante)
+    nombres = [matrizB.nombre, matrizResultante.nombre]
+    reporte = Reporte(time.strftime("%d/%m/%y"),
+                      time.strftime("%H:%M:%S"),
+                      "Matriz resultante sustituida en matriz B",
+                      "Sustituir en B",
+                      nombres
+                      )
+    reportes.append(reporte)
+
+
+'''
+def crearMatriz(frame, matriz, ruta):
     for i in range(matriz.filas):
         for j in range(matriz.columnas):
             if matriz.comprobarPosicion(i, j):
@@ -244,6 +568,14 @@ def crearMatriz(frame, matriz):
                 label = Label(frame, text="-")
                 label.grid(row=i, column=j, padx=1, pady=1)
                 frame.grid_columnconfigure(j, weight=1)
+'''
+
+
+def crearMatriz(frame, ruta):
+    img = Image.open(ruta)
+    image = ImageTk.PhotoImage(img)
+    imgFrame = Label(frame, image=image)
+    imgFrame.pack()
 
 
 def cargarMatrizA():
@@ -253,7 +585,9 @@ def cargarMatrizA():
     frameMatrizA.destroy()
     frameMatrizA = LabelFrame(frameAreaMA, text='Matriz A')
     frameMatrizA.grid(row=0, column=0)
-    crearMatriz(frameMatrizA, matriz)
+    matrizNueva = metodos.crearMatriz(matriz, matriz.filas, matriz.columnas)
+    ruta = generarGrafica(matrizNueva, matriz.nombre, "matrizA")
+    crearMatriz(frameMatrizA, ruta)
 
 
 def cargarMatrizB():
@@ -264,6 +598,8 @@ def cargarMatrizB():
     frameMatrizB = LabelFrame(frameAreaMB, text='Matriz B')
     frameMatrizB.grid(row=0, column=0)
     crearMatriz(frameMatrizB, matriz)
+    matrizNueva = metodos.crearMatriz(matriz, matriz.filas, matriz.columnas)
+    generarGrafica(matrizNueva, matriz.nombre)
 
 
 def cargarMatrizR(matriz):
@@ -273,6 +609,14 @@ def cargarMatrizR(matriz):
     frameMatrizR = LabelFrame(frameMatrizResultante, text='Matriz Resultante')
     frameMatrizR.grid(row=0, column=0)
     crearMatriz(frameMatrizR, matriz)
+    matrizNueva = metodos.crearMatriz(matriz, matriz.filas, matriz.columnas)
+    generarGrafica(matrizNueva, matriz.nombre)
+
+
+def generarHTML():
+    for reporte in reportes:
+        reporte.imprimir()
+    escribirArchivoHTML(reportes)
 
 
 menubar = Menu(ws, background='#ff8000', foreground='black', activebackground='white', activeforeground='black')
@@ -283,7 +627,7 @@ cargarArchivo.add_command(label="Seleccionar Archivo", command=escoger_archivo)
 menubar.add_cascade(label="Cargar Archivo", menu=cargarArchivo)
 
 edit = Menu(menubar, tearoff=0)
-# edit.add_command(label="Cut")
+edit.add_command(label="Generar HTML", command=generarHTML)
 menubar.add_cascade(label="Reportes", menu=edit)
 
 help = Menu(menubar, tearoff=0)
@@ -397,8 +741,8 @@ Button(frameOperacionesMatrizA, text="Rotacion Horizontal", command=rotarHorizon
 Button(frameOperacionesMatrizA, text="Rotacion Vertical", command=rotarVerticalA).grid(row=0, column=1)
 Button(frameOperacionesMatrizA, text="Transpuesta", command=transpuestaA).grid(row=1, column=0)
 Button(frameOperacionesMatrizA, text="Limpiar Zona", command=limpiarZonaA).grid(row=1, column=1)
-Button(frameOperacionesMatrizA, text="Linea Horizontal", command=addLineaHorizontalA).grid(row=2, column=0)
-Button(frameOperacionesMatrizA, text="Linea Vertical", command=addLineaVerticalA).grid(row=2, column=1)
+Button(frameOperacionesMatrizA, text="Agregar Linea Horizontal", command=addLineaHorizontalA).grid(row=2, column=0)
+Button(frameOperacionesMatrizA, text="Agregar Linea Vertical", command=addLineaVerticalA).grid(row=2, column=1)
 Button(frameOperacionesMatrizA, text="Agregar Rectangulo", command=addRectanguloA).grid(row=3, column=0)
 Button(frameOperacionesMatrizA, text="Agregar Triangulo Rectangulo", command=addTrianguloA).grid(row=3, column=1)
 # datos para las operaciones
@@ -431,8 +775,8 @@ Button(frameOperacionesMatrizB, text="Rotacion Horizontal", command=rotarHorizon
 Button(frameOperacionesMatrizB, text="Rotacion Vertical", command=rotarVerticalB).grid(row=0, column=1)
 Button(frameOperacionesMatrizB, text="Transpuesta", command=transpuestaB).grid(row=1, column=0)
 Button(frameOperacionesMatrizB, text="Limpiar Zona", command=limpiarZonaB).grid(row=1, column=1)
-Button(frameOperacionesMatrizB, text="Linea Horizontal", command=addLineaHorizontalB).grid(row=2, column=0)
-Button(frameOperacionesMatrizB, text="Linea Vertical", command=addLineaVerticalB).grid(row=2, column=1)
+Button(frameOperacionesMatrizB, text="Agregar Linea Horizontal", command=addLineaHorizontalB).grid(row=2, column=0)
+Button(frameOperacionesMatrizB, text="Agregar Linea Vertical", command=addLineaVerticalB).grid(row=2, column=1)
 Button(frameOperacionesMatrizB, text="Agregar Rectangulo", command=addRectanguloB).grid(row=3, column=0)
 Button(frameOperacionesMatrizB, text="Agregar Triangulo Rectangulo", command=addTrianguloB).grid(row=3, column=1)
 
@@ -461,7 +805,6 @@ Label(frameOperacionesMatrizB, text="Ancho").grid(row=9, column=0)
 entry_anchoB = Entry(frameOperacionesMatrizB)
 entry_anchoB.grid(row=9, column=1)
 
-
 # botones operaciones entre matrices -------------------------------------------------------------
 Button(frameOperaciones, text="Union A,B", command=unionAB).pack()
 Button(frameOperaciones, text="Interseccion A,B", command=interseccionAB).pack()
@@ -469,8 +812,8 @@ Button(frameOperaciones, text="Diferencia A,B", command=diferenciaAB).pack()
 Button(frameOperaciones, text="Diferencia Simetrica A,B", command=diferenciaSimetricaAB).pack()
 
 # botones operaciones matriz resultante
-Button(frameOpMR, text="Sustituir en A").pack()
-Button(frameOpMR, text="Sustituir en B").pack()
+Button(frameOpMR, text="Sustituir en A", command=sustituirA).pack()
+Button(frameOpMR, text="Sustituir en B", command=sustituirB).pack()
 
 # Label signo igual y signo de operacion
 Label(frameOpIgual, text="=", font=("arial italic", 18)).grid(row=0, column=0)
