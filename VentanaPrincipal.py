@@ -66,6 +66,7 @@ def datosEstudiante():
 def documentacion():
     # messagebox.showinfo('Datos del Estudiante', 'aun no hay :v ')
     subprocess.Popen(['documentacion\\ENSAYO.pdf'], shell=True)
+    subprocess.Popen(['documentacion\\Diagrama.jpeg'], shell=True)
 
 
 def rotarHorizontalA():
