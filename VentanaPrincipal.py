@@ -596,7 +596,7 @@ def actualizarComboBox(estadoA, estadoB):
     selecMA = OptionMenu(frameSelecMA, clickedA, *opciones)
     selecMA.grid(row=0, column=0)
     global selecMB
-    clickedB.set(estadoA)
+    clickedB.set(estadoB)
     selecMB.destroy()
     selecMB = OptionMenu(frameSelecMB, clickedB, *opciones)
     selecMB.grid(row=0, column=0)

@@ -131,7 +131,7 @@ def unionMatrizAB(matrizA, matrizB):
                 matrizNueva[i][j] = "*"
             else:
                 matrizNueva[i][j] = "-"
-    matrizDatos = Matriz(nombre=matrizB.nombre + "-" + matrizB.nombre, filas=n, columnas=m)
+    matrizDatos = Matriz(nombre=matrizA.nombre + "-" + matrizB.nombre, filas=n, columnas=m)
     matrizOperada = crearMatrizOrtogonal(matrizNueva, matrizDatos)
     return matrizOperada
 
@@ -156,7 +156,7 @@ def interseccionMatrizAB(matrizA, matrizB):
                 matrizNueva[i][j] = "*"
             else:
                 matrizNueva[i][j] = "-"
-    matrizDatos = Matriz(nombre=matrizB.nombre + "-" + matrizB.nombre, filas=n, columnas=m)
+    matrizDatos = Matriz(nombre=matrizA.nombre + "-" + matrizB.nombre, filas=n, columnas=m)
     matrizOperada = crearMatrizOrtogonal(matrizNueva, matrizDatos)
     return matrizOperada
 
@@ -182,7 +182,7 @@ def diferenciaMatrizAB(matrizA, matrizB):
 
             else:
                 matrizNueva[i][j] = "-"
-    matrizDatos = Matriz(nombre=matrizB.nombre + "-" + matrizB.nombre, filas=n, columnas=m)
+    matrizDatos = Matriz(nombre=matrizA.nombre + "-" + matrizB.nombre, filas=n, columnas=m)
     matrizOperada = crearMatrizOrtogonal(matrizNueva, matrizDatos)
     return matrizOperada
 
@@ -215,7 +215,7 @@ def diferenciaSimetricaMatrizAB(matrizA, matrizB):
                     matrizNueva[i][j] = "-"
             else:
                 matrizNueva[i][j] = "-"
-    matrizDatos = Matriz(nombre=matrizB.nombre + "-" + matrizB.nombre, filas=n, columnas=m)
+    matrizDatos = Matriz(nombre=matrizA.nombre + "-" + matrizB.nombre, filas=n, columnas=m)
     matrizOperada = crearMatrizOrtogonal(matrizNueva, matrizDatos)
 
     return matrizOperada
