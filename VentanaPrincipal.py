@@ -469,6 +469,7 @@ def addTrianguloB():
 def unionAB():
     matrizA = matrices.obtener_Matriz(clickedA.get())
     matrizB = matrices.obtener_Matriz(clickedB.get())
+    global matrizResultante
     matrizResultante = unionMatrizAB(matrizA, matrizB)
     # matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizR(matrizResultante)
@@ -485,6 +486,7 @@ def unionAB():
 def interseccionAB():
     matrizA = matrices.obtener_Matriz(clickedA.get())
     matrizB = matrices.obtener_Matriz(clickedB.get())
+    global matrizResultante
     matrizResultante = interseccionMatrizAB(matrizA, matrizB)
     # matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizR(matrizResultante)
@@ -501,6 +503,7 @@ def interseccionAB():
 def diferenciaAB():
     matrizA = matrices.obtener_Matriz(clickedA.get())
     matrizB = matrices.obtener_Matriz(clickedB.get())
+    global matrizResultante
     matrizResultante = diferenciaMatrizAB(matrizA, matrizB)
     # matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizR(matrizResultante)
@@ -517,8 +520,8 @@ def diferenciaAB():
 def diferenciaSimetricaAB():
     matrizA = matrices.obtener_Matriz(clickedA.get())
     matrizB = matrices.obtener_Matriz(clickedB.get())
+    global matrizResultante
     matrizResultante = diferenciaSimetricaMatrizAB(matrizA, matrizB)
-    # matrices.reemplazar_Matriz(matriz.nombre, matrizOperada)
     cargarMatrizR(matrizResultante)
     nombres = [matrizA.nombre, matrizB.nombre]
     reporte = Reporte(time.strftime("%d/%m/%y"),
@@ -532,6 +535,7 @@ def diferenciaSimetricaAB():
 
 def sustituirA():
     matrizA = matrices.obtener_Matriz(clickedA.get())
+    matrizB = matrices.obtener_Matriz(clickedB.get())
     matrices.reemplazar_Matriz(matrizA.nombre, matrizResultante)
     nombres = [matrizA.nombre, matrizResultante.nombre]
     reporte = Reporte(time.strftime("%d/%m/%y"),
@@ -542,9 +546,15 @@ def sustituirA():
                       )
     reportes.append(reporte)
 
+    actualizarComboBox(matrizResultante.nombre, matrizB.nombre)
+
+    cargarMatrizA()
+
 
 def sustituirB():
+
     matrizB = matrices.obtener_Matriz(clickedB.get())
+    matrizA = matrices.obtener_Matriz(clickedA.get())
     matrices.reemplazar_Matriz(matrizB.nombre, matrizResultante)
     nombres = [matrizB.nombre, matrizResultante.nombre]
     reporte = Reporte(time.strftime("%d/%m/%y"),
@@ -554,6 +564,10 @@ def sustituirB():
                       nombres
                       )
     reportes.append(reporte)
+
+    actualizarComboBox(matrizA.nombre, matrizResultante.nombre)
+
+    cargarMatrizB()
 
 
 '''
@@ -570,6 +584,22 @@ def crearMatriz(frame, matriz, ruta):
                 label.grid(row=i, column=j, padx=1, pady=1)
                 frame.grid_columnconfigure(j, weight=1)
 '''
+
+
+def actualizarComboBox(estadoA, estadoB):
+    global opciones
+    opciones = matrices.obtener_Nombres()
+    print(opciones)
+    global selecMA
+    clickedA.set(estadoA)
+    selecMA.destroy()
+    selecMA = OptionMenu(frameSelecMA, clickedA, *opciones)
+    selecMA.grid(row=0, column=0)
+    global selecMB
+    clickedB.set(estadoA)
+    selecMB.destroy()
+    selecMB = OptionMenu(frameSelecMB, clickedB, *opciones)
+    selecMB.grid(row=0, column=0)
 
 
 def crearMatriz(frame, ruta):

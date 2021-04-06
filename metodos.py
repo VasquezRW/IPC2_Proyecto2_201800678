@@ -217,6 +217,7 @@ def diferenciaSimetricaMatrizAB(matrizA, matrizB):
                 matrizNueva[i][j] = "-"
     matrizDatos = Matriz(nombre=matrizB.nombre + "-" + matrizB.nombre, filas=n, columnas=m)
     matrizOperada = crearMatrizOrtogonal(matrizNueva, matrizDatos)
+
     return matrizOperada
 
 
