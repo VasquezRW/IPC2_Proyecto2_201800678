@@ -29,12 +29,27 @@ def rotarVerticalmente(matriz):
 def transpuestaMatriz(matriz):
     matrizNueva = crearMatriz(matriz, matriz.filas, matriz.columnas)
     matrizAux = crearMatrizVacia(matriz.columnas, matriz.filas)
+    # for i in range(len(matrizAux)):
+    #     for j in range(len(matrizAux[0])):
+    #         if matrizNueva[j][i] == "*":
+    #             matrizAux[i][j] = "*"
+    #         else:
+    #             matrizAux[i][j] = "-"
+    columna = 0
+    for linea in matrizNueva:
+        for j in range(len(matrizAux)):
+            matrizAux[j][columna] = linea[j]
+        columna += 1
 
-    for i in range(len(matrizNueva)):
-        for j in range(len(matrizNueva[0])):
-            matrizAux[j][i] = matrizNueva[i][j]
+    matrizDatos = Matriz(nombre=matriz.nombre, filas=matriz.columnas, columnas=matriz.filas)
+    matrizOperada = crearMatrizOrtogonal(matrizAux, matrizDatos)
 
-    matrizOperada = crearMatrizOrtogonal(matrizAux, matriz)
+    for fila in matrizAux:
+        for elemento in fila:
+            print(elemento, end=" ")
+        print("\n")
+
+    matrizOperada.imprimir()
 
     return matrizOperada
 

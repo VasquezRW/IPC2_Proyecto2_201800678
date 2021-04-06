@@ -1,5 +1,4 @@
 import subprocess
-import xml.etree.ElementTree as ET
 from graphviz import Digraph
 
 
@@ -28,7 +27,7 @@ def escribirArchivoHTML(reportes):
         f.write("""
             <div class="container" style="text-align: center;"><h4 > <b>Reportes</b> <h4></div>
             <br>
-            <div class="container" style="text-align: center;" > <ul class="list-group">""")
+            <div class="container" style="text-align: center;"> <ul class="list-group">""")
         for reporte in reportes:
             f.write("<br>")
             f.write("""<li class="list-group-item">""")
@@ -43,8 +42,8 @@ def escribirArchivoHTML(reportes):
         f.write(fin)
         f.close()
         subprocess.Popen(['tabla.html'], shell=True)
-    except:
-        print("algo ocurrio")
+    except Exception as e:
+        print("Algo ocurrio: " + str(e))
 
 
 def generarGrafica(matriz, nombre, matOpe):
@@ -52,47 +51,31 @@ def generarGrafica(matriz, nombre, matOpe):
         matrizz = matriz
         dot = Digraph(comment='Table', format='png')
         dot.attr('node', shape='box')
-        # dot.node('Nombre', str(nombre))
-        # dot.node('Columna_', "1")
-        # dot.edge('Nombre', 'Czolumn_0')
-        inicio = """<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">"""
-        inicio += '<TR>'
-        inicio += '<TD>' + str(nombre) + '</TD>'
-        for i in range(1, len(matrizz)):
-            # dot.node('Column_'+str(i), str(i+1))
-            # dot.edge('Column_'+str(i-1), 'Column_'+str(i-1))
+        inicio = """<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">\n"""
+        inicio += '<TR>\n'
+        inicio += '<TD>' + str(nombre) + '</TD>\n'
+        for i in range(0, len(matrizz[0])):
             inicio += '<TD>'
-            inicio += str(i)
-            inicio += '</TD>'
+            inicio += str(i+1)
+            inicio += '</TD>\n'
         inicio += '</TR>'
 
         line = 0
 
         for linea in matriz:
-            inicio += '<TR>'
-            inicio += '<TD>' + str(line+1) + '</TD>'
-            # dot.node('fila_'+str(line), str(line+1))
-
-            # dot.node('dato_'+str(line)+"_0", dato)
-            # dot.edge('fila_'+str(line), 'dato_'+str(line)+"_0")
+            inicio += '<TR>\n'
+            inicio += '<TD>' + str(line+1) + '</TD>\n'
             for dato in linea:
-                # if matriz[line][j] == "-":
-                #     dato = " "
-                # else:
-                #     dato = "*"
-                # dot.node('dato_'+str(line)+"_"+str(j), dato)
-                # dot.edge('dato_'+str(line-1)+"_"+str(j-1), 'dato_'+str(line)+"_"+str(j))
                 if dato == "*":
-                    inicio += '<TD> * </TD>'
+                    inicio += '<TD> * </TD>\n'
                 else:
-                    # dato = "*"
-                    inicio += '<TD>   </TD>'
-            inicio += '</TR>'
+                    inicio += '<TD>   </TD>\n'
+            inicio += '</TR>\n'
             line += 1
-        inicio += '</TABLE>>'
+        inicio += '</TABLE>>\n'
 
         dot.node("tabla", inicio)
-        dot.render('graficoMatriz_'+matOpe, view=True)
+        dot.render('graficoMatriz_'+matOpe, view=False)
         return 'graficoMatriz_'+matOpe+'.png'
         # subprocess.Popen(['graficoMatriz_'+matOpe+'.png'], shell=True)
 

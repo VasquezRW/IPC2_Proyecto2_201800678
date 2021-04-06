@@ -12,14 +12,14 @@ def leer_Archivo(ruta):
         matrizCorrecta = True
         nombre = elemento.getElementsByTagName('nombre')[0].firstChild.data
         # nombre = elemento.find('nombre')
-        print(nombre)
+        #print(nombre)
         filas = int(elemento.getElementsByTagName('filas')[0].firstChild.data)
-        print(filas)
+        #print(filas)
         columnas = int(elemento.getElementsByTagName('columnas')[0].firstChild.data)
-        print(columnas)
+        #print(columnas)
         imagen = elemento.getElementsByTagName('imagen')[0].firstChild.data
         imagen = quitar_FilasVacias(imagen)
-        print(imagen)
+        #print(imagen)
         if matrices.comprobar_Nombre(nombre):
             matriz = Matriz(nombre=nombre, filas=filas, columnas=columnas)
             no_fila = 0

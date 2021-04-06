@@ -17,7 +17,7 @@ ws.geometry("1000x750")
 matrices = linked_list_circular()
 global opciones
 opciones = []
-matrizResultante = None
+matrizResultante = Matriz()
 reportes = []
 
 
@@ -28,7 +28,7 @@ def escoger_archivo():
                                                         ("all files", "*.*")))
     if ws.filename != '':
         matrices = leer_Archivo(ws.filename)
-        matrices.imprimir()
+        # matrices.imprimir()
         global opciones
         opciones = matrices.obtener_Nombres()
         print(opciones)
@@ -64,7 +64,8 @@ def datosEstudiante():
 
 
 def documentacion():
-    messagebox.showinfo('Datos del Estudiante', 'aun no hay :v ')
+    # messagebox.showinfo('Datos del Estudiante', 'aun no hay :v ')
+    subprocess.Popen(['documentacion\\ENSAYO.pdf'], shell=True)
 
 
 def rotarHorizontalA():
@@ -573,18 +574,31 @@ def crearMatriz(frame, matriz, ruta):
 
 def crearMatriz(frame, ruta):
     img = Image.open(ruta)
-    image = ImageTk.PhotoImage(img)
-    imgFrame = Label(frame, image=image)
-    imgFrame.pack()
+
+    photo = ImageTk.PhotoImage(img)
+
+    label = Label(frame, image=photo)
+    label.image = photo  # keep a reference!
+    label.pack()
 
 
 def cargarMatrizA():
     matriz = matrices.obtener_Matriz(clickedA.get())
     labelMA_Auxiliar.destroy()
     global frameMatrizA
+    global frameEspaciosMatrizA
     frameMatrizA.destroy()
+    frameEspaciosMatrizA.destroy()
     frameMatrizA = LabelFrame(frameAreaMA, text='Matriz A')
+    frameEspaciosMatrizA = LabelFrame(frameAreaMA, text='Datos Matriz')
     frameMatrizA.grid(row=0, column=0)
+    frameEspaciosMatrizA.grid(row=1, column=0)
+    lblEspLlenos = Label(frameEspaciosMatrizA, text="Espacios Llenos: " + str(matriz.espaciosLlenos),
+                         font=("arial italic", 10))
+    lblEspLlenos.pack()
+    lblEspVacios = Label(frameEspaciosMatrizA, text="Espacios Vacios: " + str(matriz.espaciosVacios),
+                         font=("arial italic", 10))
+    lblEspVacios.pack()
     matrizNueva = metodos.crearMatriz(matriz, matriz.filas, matriz.columnas)
     ruta = generarGrafica(matrizNueva, matriz.nombre, "matrizA")
     crearMatriz(frameMatrizA, ruta)
@@ -594,23 +608,45 @@ def cargarMatrizB():
     matriz = matrices.obtener_Matriz(clickedB.get())
     labelMB_Auxiliar.destroy()
     global frameMatrizB
+    global frameEspaciosMatrizB
     frameMatrizB.destroy()
+    frameEspaciosMatrizB.destroy()
     frameMatrizB = LabelFrame(frameAreaMB, text='Matriz B')
+    frameEspaciosMatrizB = LabelFrame(frameAreaMB, text='Datos Matriz')
     frameMatrizB.grid(row=0, column=0)
-    crearMatriz(frameMatrizB, matriz)
+    frameEspaciosMatrizB.grid(row=1, column=0)
+    lblEspLlenos = Label(frameEspaciosMatrizB, text="Espacios Llenos: "+str(matriz.espaciosLlenos),
+                         font=("arial italic", 10))
+    lblEspLlenos.pack()
+    lblEspVacios = Label(frameEspaciosMatrizB, text="Espacios Vacios: "+str(matriz.espaciosVacios),
+                         font=("arial italic", 10))
+    lblEspVacios.pack()
     matrizNueva = metodos.crearMatriz(matriz, matriz.filas, matriz.columnas)
-    generarGrafica(matrizNueva, matriz.nombre)
+    ruta = generarGrafica(matrizNueva, matriz.nombre, "matrizB")
+    crearMatriz(frameMatrizB, ruta)
 
 
 def cargarMatrizR(matriz):
+    matriz.calcularEspaciosLlenos()
+    matriz.calcularEspaciosVacios()
     labelMB_Auxiliar.destroy()
     global frameMatrizR
+    global frameEspaciosMatrizR
     frameMatrizR.destroy()
+    frameEspaciosMatrizR.destroy()
     frameMatrizR = LabelFrame(frameMatrizResultante, text='Matriz Resultante')
+    frameEspaciosMatrizR = LabelFrame(frameMatrizResultante, text='Datos Matriz')
     frameMatrizR.grid(row=0, column=0)
-    crearMatriz(frameMatrizR, matriz)
+    frameEspaciosMatrizR.grid(row=1, column=0)
+    lblEspLlenos = Label(frameEspaciosMatrizR, text="Espacios Llenos: " + str(matriz.espaciosLlenos),
+                         font=("arial italic", 10))
+    lblEspLlenos.pack()
+    lblEspVacios = Label(frameEspaciosMatrizR, text="Espacios Vacios: " + str(matriz.espaciosVacios),
+                         font=("arial italic", 10))
+    lblEspVacios.pack()
     matrizNueva = metodos.crearMatriz(matriz, matriz.filas, matriz.columnas)
-    generarGrafica(matrizNueva, matriz.nombre)
+    ruta = generarGrafica(matrizNueva, matriz.nombre, "matrizR")
+    crearMatriz(frameMatrizR, ruta)
 
 
 def generarHTML():
@@ -678,25 +714,37 @@ frameMatrizResultante.grid(row=0, column=4)
 frameMatrizA = LabelFrame(frameAreaMA, text='Matriz A')
 frameMatrizA.grid(row=0, column=0)
 
+# frame area de labels espacio
+frameEspaciosMatrizA = LabelFrame(frameAreaMA, text='Datos Matriz')
+frameEspaciosMatrizA.grid(row=1, column=0)
+
 # frame de operaciones matriz A
 frameOperacionesMatrizA = LabelFrame(frameAreaMA, text='Operaciones de Matriz A')
-frameOperacionesMatrizA.grid(row=1, column=0)
+frameOperacionesMatrizA.grid(row=2, column=0)
 
 # frame de matriz B
 frameMatrizB = LabelFrame(frameAreaMB, text='Matriz B')
 frameMatrizB.grid(row=0, column=0)
 
+# frame area de labels espacio
+frameEspaciosMatrizB = LabelFrame(frameAreaMB, text='Datos Matriz')
+frameEspaciosMatrizB.grid(row=1, column=0)
+
 # frame de operaciones matriz B
 frameOperacionesMatrizB = LabelFrame(frameAreaMB, text='Operaciones de Matriz B')
-frameOperacionesMatrizB.grid(row=1, column=0)
+frameOperacionesMatrizB.grid(row=2, column=0)
 
 # frame de matriz resultante
 frameMatrizR = LabelFrame(frameMatrizResultante, text='Matriz Resultante')
 frameMatrizR.grid(row=0, column=0)
 
+# frame area de labels espacio
+frameEspaciosMatrizR = LabelFrame(frameMatrizResultante, text='Datos Matriz')
+frameEspaciosMatrizR.grid(row=1, column=0)
+
 # frame de operaciones de matriz resultante
 frameOpMR = LabelFrame(frameMatrizResultante, text='Operaciones de Matriz Resultante')
-frameOpMR.grid(row=1, column=0)
+frameOpMR.grid(row=2, column=0)
 
 # frame de signo de operaciones entre matrices
 frameSignoOperaciones = LabelFrame(frameAreaOp, text='')
